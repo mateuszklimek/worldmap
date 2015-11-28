@@ -17,12 +17,12 @@ body {
     z-index: 999;
     margin: 2rem;
     width: 100%;
+    font-family: Helvetica Neue, sans-serif;
 }
 
 h1 {
     display: inline-block;
-  font-family: Helvetica, sans-serif;
-  color: #333;
+    color: #333;
     margin: 0;
 }
 
@@ -188,7 +188,10 @@ d3.json("salary-data-script.json", function(error, world) {
 d3.json("data/climate-data.json", function(error, world) {
    climate = {};
     world.forEach(function (country) {
-       climate[country.name] = { "min": country.minTemperature, "max": country.maxTemperature };
+       climate[country.name] = {
+           "min": Math.floor(country.minTemperature),
+           "max": Math.floor(country.maxTemperature)
+       };
     });
 });
 
@@ -198,19 +201,10 @@ function normalize(value, min, max, start, end) {
 
 function normalizeSalary(salary, start, end) {
     return normalize(salary, 0, 10000, start, end);
-//        var min = 0;
-//        var max = 10000;
-//
-//        return ((salary - min) / (max - min)) * (end - start) + start;
 }
 
 function normalizeTemperature(temperature, start, end) {
     return normalize(temperature, -40, 40, start, end);
-
-//        var min = -40;
-//        var max = +40;
-//
-//        return ((temperature - min) / (max - min)) * (end - start) + start;
 }
 
 function onlyPositive(v) {
@@ -264,7 +258,7 @@ function draw(topo) {
                     + (255 - onlyPositive(notGreen)) + ", " + (255 - onlyPositive(red)) + ")";
             return rgb;
         } else {
-            return "#ddeedd"
+            return "#dddddd"
         }
     }
 
@@ -298,7 +292,7 @@ function draw(topo) {
 
     function getClimate(country) {
         if (climate[country] !== undefined) {
-            return climate[country].min + "°C - " + climate[country].max + "°C";
+            return climate[country].min + "°C – " + climate[country].max + "°C";
         } else {
             return "No data available";
         }
