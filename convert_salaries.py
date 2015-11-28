@@ -33,6 +33,16 @@ for line in f:
         }
     )
 
+to_json.append(
+    {
+        'name': 'United Kingdom',
+        'salary': 64507.5,
+        'country_code': 'UK'
+    }
+)
+
 f = open('salary-data-script.json', 'w')
 json.dump(to_json, f, indent=4)
+
+
 
