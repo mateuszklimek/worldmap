@@ -1,37 +1,42 @@
 [
   {
     "name": "France",
-    "minTemperature": 25,
-    "maxTemperature": -10
+    "maxTemperature": 25,
+    "minTemperature": -10
   },
   {
     "name": "Poland",
-    "minTemperature": 23,
-    "maxTemperature": -17
+    "maxTemperature": 23,
+    "minTemperature": -17
   },
   {
     "name": "United States",
-    "minTemperature": 35,
-    "maxTemperature": -25
+    "maxTemperature": 35,
+    "minTemperature": -25
   },
   {
     "name": "Thailand",
-    "minTemperature": 35,
-    "maxTemperature": 20
+    "maxTemperature": 35,
+    "minTemperature": 20
   },
   {
     "name": "Ghana",
-    "minTemperature": 35,
-    "maxTemperature": 10
+    "maxTemperature": 35,
+    "minTemperature": 10
   },
   {
     "name": "Australia",
-    "minTemperature": 30,
-    "maxTemperature": -5
+    "maxTemperature": 30,
+    "minTemperature": -5
   },
   {
     "name": "Equador",
-    "minTemperature": 25,
-    "maxTemperature": -10
+    "maxTemperature": 25,
+    "minTemperature": -10
+  },
+  {
+    "name": "Norway",
+    "maxTemperature": 10,
+    "minTemperature": -30
   }
 ]
