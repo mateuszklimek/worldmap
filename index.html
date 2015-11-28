@@ -7,7 +7,6 @@
     fill: #ddeedd;
     stroke: #aaaaaa;
     stroke-width: .5px;
-
 }
 
 .country:hover{
@@ -38,6 +37,7 @@ div.tooltip {
   box-shadow: 0px 0px 2px 0px #a6a6a6;
   opacity: 0.9;
   position: absolute;
+  font-family: Helvetica, sans-serif;
 }
 .graticule {
   fill: none;
@@ -73,6 +73,8 @@ var height = width / 2;
 
 var topo,projection,path,svg,g;
 
+var salary;
+
 var graticule = d3.geo.graticule();
 
 var tooltip = d3.select("#container").append("div").attr("class", "tooltip hidden");
@@ -99,10 +101,21 @@ function setup(width,height){
 
 d3.json("data/world-topo-min.json", function(error, world) {
 
+    console.log(world);
+
   var countries = topojson.feature(world, world.objects.countries).features;
 
   topo = countries;
   draw(topo);
+
+});
+
+d3.json("data/salary-data.json", function(error, world) {
+    salary = {};
+    world.forEach(function (country) {
+       salary[country.name] = country.salary;
+    });
+    console.log(salary);
 
 });
 
@@ -113,7 +126,7 @@ function draw(topo) {
    .attr("class", "equator")
    .attr("d", path);
 
-  var country = g.selectAll(".country").data(topo);
+  var country = g.selectAll(".country").data(topo, function(d,i) { return d.properties.name; });
 
   country.enter().insert("path")
       .attr("class", "country")
@@ -125,6 +138,18 @@ function draw(topo) {
   var offsetL = document.getElementById('container').offsetLeft+20;
   var offsetT = document.getElementById('container').offsetTop+10;
 
+    function div(html) {
+        return "<div>" + html + "</div>";
+    }
+
+    function getSalary(country) {
+        if (salary[country] !== undefined) {
+            return "$" + salary[country];
+        } else {
+            return "No data available";
+        }
+    }
+
   //tooltips
   country
     .on("mousemove", function(d,i) {
@@ -133,7 +158,7 @@ function draw(topo) {
 
       tooltip.classed("hidden", false)
              .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
-             .html(d.properties.name);
+             .html(div(d.properties.name) + div(getSalary(d.properties.name)) + div("Climate info"));
 
       })
       .on("mouseout",  function(d,i) {
