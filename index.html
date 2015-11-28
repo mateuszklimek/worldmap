@@ -12,14 +12,35 @@ body {
   margin: 0px;
 }
 
+.header {
+    position: fixed;
+    z-index: 999;
+    margin: 2rem;
+    width: 100%;
+}
+
 h1 {
+    display: inline-block;
   font-family: Helvetica, sans-serif;
   color: #333;
-  position: fixed;
-  z-index: 999;
-  margin-top: 20px;
-  margin-left: 20px;
+    margin: 0;
 }
+
+#scaleContainer {
+    width: 28rem;
+    position: absolute;
+    right: 0;
+    display: inline-block;
+}
+
+.temp {
+    display: inline-block;
+}
+
+#scale {
+    display: inline-block;
+}
+
 
 .country:hover{
   stroke: #fff;
@@ -30,7 +51,7 @@ h1 {
   text-transform:capitalize;
 }
 #container {
-  margin:0px 0;
+  /*margin:0 0;*/
     width: 100%;
     position: fixed;
     top: 0;
@@ -44,12 +65,6 @@ h1 {
   overflow:hidden;
   background: #F0F8FF;
 }
-
-#scale {
-    display: inline-block;
-    float: right;
-}
-
 .gradient {
     width: 20rem;
     white-space: nowrap;
@@ -62,7 +77,7 @@ h1 {
 .grad-step {
     display: inline-block;
     height: 20px;
-    width: 1%;
+    width: 0.25rem;
 }
 
 .hidden {
@@ -98,7 +113,14 @@ div.tooltip {
 </head>
 <body>
 
-  <h1>Find best places to work as a Software Developer! <div id="scale"></div></h1>
+  <div class="header">
+      <h1>Find best places to work as a Software Developer!</h1>
+      <div id="scaleContainer">
+          <div class="temp">-40°C </div>
+          <div id="scale"></div>
+        <div class="temp">40°C</div>
+      </div>
+  </div>
 
   <div id="container"></div>
 
@@ -170,6 +192,45 @@ d3.json("data/climate-data.json", function(error, world) {
     });
 });
 
+function normalize(value, min, max, start, end) {
+    return ((value - min) / (max - min)) * (end - start) + start;
+}
+
+function normalizeSalary(salary, start, end) {
+    return normalize(salary, 0, 10000, start, end);
+//        var min = 0;
+//        var max = 10000;
+//
+//        return ((salary - min) / (max - min)) * (end - start) + start;
+}
+
+function normalizeTemperature(temperature, start, end) {
+    return normalize(temperature, -40, 40, start, end);
+
+//        var min = -40;
+//        var max = +40;
+//
+//        return ((temperature - min) / (max - min)) * (end - start) + start;
+}
+
+function onlyPositive(v) {
+    if (v > 0) {
+        return Math.floor(v);
+    } else {
+        return 0;
+    }
+}
+
+var scale = d3.select("#scale").append("div").attr("class", "gradient");
+var scaleFunction = chroma.scale(['blue', '8888ff', 'white', 'yellow', 'red']);
+
+_.chain(_.range(-40, 40))
+        .map(function (n) { return normalize(n, -40, 40, 0, 1); })
+        .forEach(function(n) {
+            scale.append("span").attr("class", "grad-step").style("background-color", scaleFunction(n))
+        })
+        .value();
+
 function draw(topo) {
 
   g.append("path")
@@ -178,35 +239,6 @@ function draw(topo) {
    .attr("d", path);
 
   var country = g.selectAll(".country").data(topo, function(d,i) { return d.properties.name; });
-
-    function normalize(value, min, max, start, end) {
-        return ((value - min) / (max - min)) * (end - start) + start;
-    }
-
-    function normalizeSalary(salary, start, end) {
-        return normalize(salary, 0, 10000, start, end);
-//        var min = 0;
-//        var max = 10000;
-//
-//        return ((salary - min) / (max - min)) * (end - start) + start;
-    }
-
-    function normalizeTemperature(temperature, start, end) {
-        return normalize(temperature, -40, 40, start, end);
-
-//        var min = -40;
-//        var max = +40;
-//
-//        return ((temperature - min) / (max - min)) * (end - start) + start;
-    }
-
-    function onlyPositive(v) {
-        if (v > 0) {
-            return Math.floor(v);
-        } else {
-            return 0;
-        }
-    }
 
     function getColor(country) {
         if (climate[country] !== undefined) {
@@ -243,16 +275,6 @@ function draw(topo) {
       .attr("title", function(d,i) { return d.properties.name; })
       .style("fill", function(d,i) { return getColor(d.properties.name); })
   ;
-
-    var scale = d3.select("#scale").append("div").attr("class", "gradient");
-    var scaleFunction = chroma.scale(['blue', 'white', 'yellow', 'red']);
-
-    _.chain(_.range(-40, 40))
-            .map(function (n) { return normalize(n, -40, 40, 0, 1); })
-            .forEach(function(n) {
-                scale.append("span").attr("class", "grad-step").style("background-color", scaleFunction(n))
-            })
-            .value();
 
   //offsets for tooltips
   var offsetL = document.getElementById('container').offsetLeft+20;
