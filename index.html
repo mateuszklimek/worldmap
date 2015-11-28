@@ -27,7 +27,7 @@ h1 {
 }
 
 #scaleContainer {
-    width: 28rem;
+    width: 22rem;
     position: absolute;
     right: 0;
     display: inline-block;
@@ -41,10 +41,26 @@ h1 {
     display: inline-block;
 }
 
+.gradient {
+    width: 14rem;
+    white-space: nowrap;
+    position: relative;
+    display: inline-block;
+    top: 4px;
+    padding-bottom: 15px;
+}
+
+.grad-step {
+    display: inline-block;
+    height: 20px;
+    width: 0.2rem;
+}
+
 
 .country:hover{
-  stroke: #fff;
-  stroke-width: 1.5px;
+  /*stroke: #009900;*/
+  stroke-width: 3px;
+    fill: #ddd !important;
 }
 .text{
   font-size:10px;
@@ -65,20 +81,7 @@ h1 {
   overflow:hidden;
   background: #F0F8FF;
 }
-.gradient {
-    width: 20rem;
-    white-space: nowrap;
-    position: relative;
-    display: inline-block;
-    top: 4px;
-    padding-bottom: 15px;
-}
 
-.grad-step {
-    display: inline-block;
-    height: 20px;
-    width: 0.25rem;
-}
 
 .hidden {
   display: none;
@@ -116,9 +119,9 @@ div.tooltip {
   <div class="header">
       <h1>Find best places to work as a Software Developer!</h1>
       <div id="scaleContainer">
-          <div class="temp">-40°C </div>
+          <div class="temp">-35°C </div>
           <div id="scale"></div>
-        <div class="temp">40°C</div>
+          <div class="temp">35°C</div>
       </div>
   </div>
 
@@ -129,6 +132,10 @@ div.tooltip {
 <script src="js/chroma.min.js"></script>
 <script src="js/underscore.min.js"></script>
 <script>
+
+var minTemp = -35;
+var maxTemp = 35;
+
 d3.select(window).on("resize", throttle);
 
 var zoom = d3.behavior.zoom()
@@ -204,7 +211,7 @@ function normalizeSalary(salary, start, end) {
 }
 
 function normalizeTemperature(temperature, start, end) {
-    return normalize(temperature, -40, 40, start, end);
+    return normalize(temperature, minTemp, maxTemp, start, end);
 }
 
 function onlyPositive(v) {
@@ -218,8 +225,8 @@ function onlyPositive(v) {
 var scale = d3.select("#scale").append("div").attr("class", "gradient");
 var scaleFunction = chroma.scale(['blue', '8888ff', 'white', 'yellow', 'red']);
 
-_.chain(_.range(-40, 40))
-        .map(function (n) { return normalize(n, -40, 40, 0, 1); })
+_.chain(_.range(minTemp, maxTemp))
+        .map(function (n) { return normalize(n, minTemp, maxTemp, 0, 1); })
         .forEach(function(n) {
             scale.append("span").attr("class", "grad-step").style("background-color", scaleFunction(n))
         })
@@ -292,7 +299,8 @@ function draw(topo) {
 
     function getClimate(country) {
         if (climate[country] !== undefined) {
-            return climate[country].min + "°C – " + climate[country].max + "°C";
+            var average = (climate[country].min + climate[country].max) / 2;
+            return climate[country].min + "°C – " + climate[country].max + "°C (" + average + "°C)";
         } else {
             return "No data available";
         }
