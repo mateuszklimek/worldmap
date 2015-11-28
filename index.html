@@ -60,7 +60,7 @@ h1 {
 .country:hover{
   /*stroke: #009900;*/
   stroke-width: 3px;
-    fill: #ddd !important;
+    fill: #eee !important;
 }
 .text{
   font-size:10px;
@@ -96,6 +96,10 @@ div.tooltip {
   opacity: 0.9;
   position: absolute;
   font-family: Helvetica, sans-serif;
+}
+.dataUnavailable {
+    color: #aaa !important;
+    font-style: italic;
 }
 .graticule {
   fill: none;
@@ -293,7 +297,7 @@ function draw(topo) {
         if (salary[country] !== undefined) {
             return "$" + numberWithCommas(salary[country]);
         } else {
-            return "No data available";
+            return "<span class='dataUnavailable'>No data available</span>";
         }
     }
 
@@ -302,7 +306,7 @@ function draw(topo) {
             var average = (climate[country].min + climate[country].max) / 2;
             return climate[country].min + "°C – " + climate[country].max + "°C (" + average + "°C)";
         } else {
-            return "No data available";
+            return "<span class='dataUnavailable'>No data available</span>";
         }
     }
 
