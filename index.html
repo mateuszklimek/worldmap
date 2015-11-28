@@ -8,6 +8,11 @@
     stroke-width: .5px;
 }
 
+h1 {
+  font-family: Helvetica, sans-serif;
+  color: #333;
+}
+
 .country:hover{
   stroke: #fff;
   stroke-width: 1.5px;
@@ -258,15 +263,6 @@ function draw(topo) {
         tooltip.classed("hidden", true);
       });
 
-
-  //EXAMPLE: adding some capitals from external CSV file
-  d3.csv("data/country-capitals.csv", function(err, capitals) {
-
-    capitals.forEach(function(i){
-      addpoint(i.CapitalLongitude, i.CapitalLatitude, i.CapitalName );
-    });
-
-  });
 
 }
 
