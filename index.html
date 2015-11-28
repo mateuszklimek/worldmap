@@ -135,6 +135,7 @@ div.tooltip {
 <script src="js/topojson.v1.min.js"></script>
 <script src="js/chroma.min.js"></script>
 <script src="js/underscore.min.js"></script>
+<script src="js/textures.min.js"></script>
 <script>
 
 var minTemp = -35;
@@ -255,6 +256,8 @@ function draw(topo) {
                 notGreen = blue;
             }
 
+
+
 //            var normalizedRed = normalize(red, 0, 255, 0, 1);
 //            var normalizedNotGreen = normalize(notGreen, 0, 255, 0, 1);
 //            var normalizedBlue = normalize(blue, 0, 255, 0, 1);
@@ -272,13 +275,27 @@ function draw(topo) {
             return "#dddddd"
         }
     }
-
+    function getSalaryTexture(country) {
+      if(salary[country] !== undefined ){
+        var tt = textures.lines()
+                         .size(200/normalizeSalary(salary[country], 1, 5)).stroke("#aaa")
+                         .strokeWidth(1);
+        return tt;
+      } else {
+        return textures.lines().size(100).stroke(getColor(country));
+      }
+    }
   country.enter().insert("path")
       .attr("class", "country")
       .attr("d", path)
       .attr("id", function(d,i) { return d.id; })
       .attr("title", function(d,i) { return d.properties.name; })
-      .style("fill", function(d,i) { return getColor(d.properties.name); })
+      .style("fill", function(d,i) {
+          t = getSalaryTexture(d.properties.name);
+          t.background(getColor(d.properties.name));
+          g.call(t);
+          return t.url(); })
+
   ;
 
   //offsets for tooltips
