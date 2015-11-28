@@ -1,0 +1,37 @@
+[
+  {
+    "name": "France",
+    "minTemperature": 25,
+    "maxTemperature": -10
+  },
+  {
+    "name": "Poland",
+    "minTemperature": 23,
+    "maxTemperature": -17
+  },
+  {
+    "name": "United States",
+    "minTemperature": 35,
+    "maxTemperature": -25
+  },
+  {
+    "name": "Thailand",
+    "minTemperature": 35,
+    "maxTemperature": 20
+  },
+  {
+    "name": "Ghana",
+    "minTemperature": 35,
+    "maxTemperature": 10
+  },
+  {
+    "name": "Australia",
+    "minTemperature": 30,
+    "maxTemperature": -5
+  },
+  {
+    "name": "Equador",
+    "minTemperature": 25,
+    "maxTemperature": -10
+  }
+]
