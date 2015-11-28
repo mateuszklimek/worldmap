@@ -26,5 +26,9 @@
   {
     "name": "Equador",
     "salary": 1500
+  },
+  {
+    "name": "Norway",
+    "salary": 8000
   }
 ]
