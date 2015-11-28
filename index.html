@@ -8,9 +8,17 @@
     stroke-width: .5px;
 }
 
+body {
+  margin: 0px;
+}
+
 h1 {
   font-family: Helvetica, sans-serif;
   color: #333;
+  position: fixed;
+  z-index: 999;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 
 .country:hover{
@@ -22,9 +30,10 @@ h1 {
   text-transform:capitalize;
 }
 #container {
-  margin:10px 0;
+  margin:0px 0;
     width: 100%;
     position: fixed;
+    top: 0;
     left: 0;
     right: 0;
     border-top: 1px solid grey;
