@@ -33,6 +33,22 @@
 
 #scale {
     display: inline-block;
+    float: right;
+}
+
+.gradient {
+    width: 20rem;
+    white-space: nowrap;
+    position: relative;
+    display: inline-block;
+    top: 4px;
+    padding-bottom: 15px;
+}
+
+.grad-step {
+    display: inline-block;
+    height: 20px;
+    width: 1%;
 }
 
 .hidden {
@@ -75,6 +91,7 @@ div.tooltip {
 <script src="js/d3.min.js"></script>
 <script src="js/topojson.v1.min.js"></script>
 <script src="js/chroma.min.js"></script>
+<script src="js/underscore.min.js"></script>
 <script>
 d3.select(window).on("resize", throttle);
 
@@ -180,8 +197,12 @@ function draw(topo) {
     function getColor(country) {
         if (climate[country] !== undefined) {
             var red = normalizeTemperature((climate[country].max + climate[country].min) / 2, -255, 255);
-            var notGreen = (red - 127) * 3;
             var blue = -red;
+            var notGreen = (red - 127) * 3;
+
+            if (blue > 0) {
+                notGreen = blue;
+            }
 
 //            var normalizedRed = normalize(red, 0, 255, 0, 1);
 //            var normalizedNotGreen = normalize(notGreen, 0, 255, 0, 1);
@@ -210,9 +231,14 @@ function draw(topo) {
   ;
 
     var scale = d3.select("#scale").append("div").attr("class", "gradient");
-
     var scaleFunction = chroma.scale(['blue', 'white', 'yellow', 'red']);
-    console.log(scale);
+
+    _.chain(_.range(-40, 40))
+            .map(function (n) { return normalize(n, -40, 40, 0, 1); })
+            .forEach(function(n) {
+                scale.append("span").attr("class", "grad-step").style("background-color", scaleFunction(n))
+            })
+            .value();
 
   //offsets for tooltips
   var offsetL = document.getElementById('container').offsetLeft+20;
