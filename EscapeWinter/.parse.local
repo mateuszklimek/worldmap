@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "EscapeWinter": {
+      "applicationId": "LWiCJpcDBFmHtxx0G8p7qGxKSbARU2zJR0ahlAoM"
+    },
+    "_default": {
+      "link": "EscapeWinter"
+    }
+  }
+}
